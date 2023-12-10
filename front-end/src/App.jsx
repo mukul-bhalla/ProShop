@@ -9,7 +9,6 @@ const App = () => {
     <main className='py-3'>
       <Container>
         <Outlet />
-
       </Container>
 
     </main>
