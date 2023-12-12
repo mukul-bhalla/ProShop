@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/mukul-bhalla/ProShop#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
