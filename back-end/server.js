@@ -1,23 +1,22 @@
 const express = require('express');
+const dotenv = require('dotenv');
+dotenv.config();
 const app = express();
 const products = require('./data/products')
-const port = 5000;
+const port = process.env.PORT || 5000;
+const Cors = require('cors');
+app.use(Cors());
 app.get('/', (req, res) => {
     res.send('API is running');
 })
 
-app.get('/products', (req, res) => {
+app.get('/api/products', (req, res) => {
     res.json(products)
 })
 
-app.get('/products/:id', (req, res) => {
+app.get('/api/products/:id', (req, res) => {
     const { id } = req.params;
-    const p = products.map((p) => {
-
-        if (p._id === id) {
-            return p;
-        }
-    })
+    const p = products.find((p) => p._id === id);
     res.json(p);
 })
 app.listen(port, () => {
