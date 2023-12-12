@@ -5,6 +5,8 @@ const app = express();
 const products = require('./data/products')
 const port = process.env.PORT || 5000;
 const Cors = require('cors');
+const connectDB = require('./config/db')
+connectDB();
 app.use(Cors());
 app.get('/', (req, res) => {
     res.send('API is running');
