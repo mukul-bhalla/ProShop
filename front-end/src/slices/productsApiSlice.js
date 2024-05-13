@@ -8,8 +8,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 url: PRODUCTS_URL,
 
             }),
-            keepUnusedDataFor: 10,
-            providesTags: ['Products']
+            keepUnusedDataFor: 5,
+            // providesTags: ['Product']
         })
     }),
 
