@@ -14,7 +14,9 @@ const Cors = require('cors');
 const connectDB = require('./config/db')
 connectDB();
 
-app.use(Cors());
+// app.use(Cors()); 
+// No Need for cors i using proxy in vite.config.js
+
 
 app.get('/', (req, res) => {
     res.send('API is running');
