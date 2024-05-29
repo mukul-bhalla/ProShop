@@ -1,12 +1,31 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/userModel');
-
+const jwt = require('jsonwebtoken');
 
 // @desc Auth user and get token
 // @route POST/api/users/login
 // @access PUBLIC
 const authUser = asyncHandler(async (req, res) => {
-    res.send("Auth user")
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && (await user.matchPassword(password))) {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '2d',
+        });
+
+        //Set JWT as HTTP-Only Cookie
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict',
+            maxAge: 2 * 24 * 60 * 60 * 1000 //2daya
+        })
+        res.json(user)
+    }
+    else {
+        res.status(401);
+        throw new Error('Invalid Email or Password');
+    }
 })
 
 
@@ -22,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route POST/api/users/logout
 // @access PRIVATE
 const logoutUser = asyncHandler(async (req, res) => {
-    res.send("logout user")
+    res.send("logout  user")
 })
 
 
