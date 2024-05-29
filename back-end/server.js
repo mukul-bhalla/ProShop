@@ -8,6 +8,7 @@ const notFound = require('./middleware/errorMiddleware')
 const errorHandler = require('./middleware/errorMiddleware')
 
 const productRoutes = require('./Routes/productRoutes');
+const userRoutes = require('./Routes/userRoutes');
 
 const port = process.env.PORT || 5000;
 const Cors = require('cors');
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 // app.use(notFound);
 // app.use(errorHandler);
