@@ -1,6 +1,7 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const { admin, protect } = require('../middleware/authMiddleware');
 
 // @desc Auth user and get token
 // @route POST/api/users/login
@@ -48,9 +49,9 @@ const logoutUser = asyncHandler(async (req, res) => {
 // @desc Get userprofile
 // @route GET/api/users/profile
 // @access PUBLIC
-const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = asyncHandler(protect(async (req, res) => {
     res.send("Get user profile")
-})
+}))
 
 
 // @desc UPDATE userprofile

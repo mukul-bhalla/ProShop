@@ -10,6 +10,8 @@ const { authUser,
     deletetUser,
     updateUser } = require('../controllers/userController');
 
+
+
 router.route('/').post(registerUser).get(getUsers);
 router.post('/logout', logoutUser);
 router.post('/login', authUser);
