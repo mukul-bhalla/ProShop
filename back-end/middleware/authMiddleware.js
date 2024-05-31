@@ -4,9 +4,10 @@ const User = require('../models/userModel');
 
 //Protect Routes
 const protect = asyncHandler(async (req, res, next) => {
-    let token
+    let token;
     //Read the jwt from cookie
-    token = req.cookie.jwt;
+    token = req.cookies.jwt;
+
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -34,4 +35,4 @@ const admin = (req, res, next) => {
     }
 }
 
-module.exports = admin, protect;
+module.exports = { admin, protect }; 
