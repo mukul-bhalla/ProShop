@@ -1,7 +1,6 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/userModel');
-const jwt = require('jsonwebtoken');
-
+const generateToken = require('../utils/generateToken')
 // @desc Auth user and get token
 // @route POST/api/users/login
 // @access PUBLIC
@@ -9,18 +8,7 @@ const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: '30d',
-        });
-
-
-        //Set JWT as HTTP-Only Cookie
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'strict',
-            maxAge: 30 * 24 * 60 * 60 * 1000 //2daya
-        })
+        generateToken(res, user._id);
         res.json({
             _id: user._id,
             name: user.name,
@@ -39,7 +27,34 @@ const authUser = asyncHandler(async (req, res) => {
 // @route POST/api/users/
 // @access PUBLIC
 const registerUser = asyncHandler(async (req, res) => {
-    res.send("register user")
+    // res.send("register user")
+    const { name, email, password } = req.body;
+    const userExists = await User.findOne({ email })
+
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists')
+    }
+
+    const user = new User({ name, email, password })
+    await user.save()
+
+
+    if (user) {
+        generateToken(res, user._id);
+
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin
+
+        })
+    }
+    else {
+        res.status(400);
+        throw new Error('Invalid user data')
+    }
 })
 
 
@@ -47,7 +62,12 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route POST/api/users/logout
 // @access PRIVATE
 const logoutUser = asyncHandler(async (req, res) => {
-    res.send("logout  user")
+    // res.send("logout  user")
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
 })
 
 
