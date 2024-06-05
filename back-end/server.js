@@ -6,8 +6,8 @@ dotenv.config();
 const app = express();
 
 
-// const notFound = require('./middleware/errorMiddleware')
-// const errorHandler = require('./middleware/errorMiddleware')
+const notFound = require('./middleware/errorMiddleware')
+const errorHandler = require('./middleware/errorMiddleware')
 
 const productRoutes = require('./Routes/productRoutes');
 const userRoutes = require('./Routes/userRoutes');
@@ -37,8 +37,8 @@ app.use('/api/users', userRoutes);
 app.get('/', (req, res) => {
     res.send('API is running');
 })
-// app.use(notFound);
-// app.use(errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Listening at PORT ${port}`)
